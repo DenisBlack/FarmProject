@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e75bfc93b07a4b9da21292d31425c882, type: 3}
+  m_Name: PotatoPlant
+  m_EditorClassIdentifier: 
+  _productReference: {fileID: 11400000, guid: 9facfccf6fc473a44885e396efe02e87, type: 2}
+  _growTime: 65
+  harvestController: {fileID: 2316006615091430372, guid: d6c4f71d75a3d434fa5f2550f5e00343,
+    type: 3}
+  _plantPrefab: {fileID: -3482323397174550082, guid: a384cd574b884c945b5d38f5e41e7f74,
+    type: 3}
+  _productPrefab: {fileID: -1366985704613799126, guid: e6f449d3d4e9e4e4a805826cf0d10a89,
+    type: 3}

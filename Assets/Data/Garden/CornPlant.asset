@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e75bfc93b07a4b9da21292d31425c882, type: 3}
+  m_Name: CornPlant
+  m_EditorClassIdentifier: 
+  _productReference: {fileID: 11400000, guid: a503d19d667d04746a41a43d4e3bfef1, type: 2}
+  _growTime: 35
+  harvestController: {fileID: 2316006615091430372, guid: f47afa476408cfd47b09368b84b2c780,
+    type: 3}
+  _plantPrefab: {fileID: -3482323397174550082, guid: f9d2d8f46d1db0e48902d2bc599ada13,
+    type: 3}
+  _productPrefab: {fileID: -1366985704613799126, guid: 249e2eb5e953b2f4abe4428bd286c070,
+    type: 3}

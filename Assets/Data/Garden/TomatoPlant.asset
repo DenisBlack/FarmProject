@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e75bfc93b07a4b9da21292d31425c882, type: 3}
+  m_Name: TomatoPlant
+  m_EditorClassIdentifier: 
+  _productReference: {fileID: 11400000, guid: b531e761396c9a34299c9b11d60884f4, type: 2}
+  _growTime: 120
+  harvestController: {fileID: 2316006615091430372, guid: 42ac22a9b3b383344ba8eee000986c95,
+    type: 3}
+  _plantPrefab: {fileID: 7895379562225101350, guid: c506eb92ecef1434aa9ba7a44ace326f,
+    type: 3}
+  _productPrefab: {fileID: -2643923005330742257, guid: fdc95b90c154eac44a4d3061648fa41f,
+    type: 3}
