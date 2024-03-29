@@ -1,12 +1,11 @@
 ﻿using System;
-using Events;
 using Inventory;
 using UnityEngine;
 using Utils;
 
 namespace Gardening
 {
-    public class Product : MonoBehaviour, ICollectible
+    public class Product : MonoBehaviour
     {
         public Item Item => _item;
         private Item _item;
@@ -22,17 +21,7 @@ namespace Gardening
         public void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag(Constants.PlayerTag))
-            {
-                EventBus<ItemPickEvent>.Raise(new ItemPickEvent(_item, 1));
-
                 PickUpAction?.Invoke(this);
-            }
-        }
-
-        public void Collect()
-        {
-            EventBus<ItemPickEvent>.Raise(new ItemPickEvent(_item, 1));
-            PickUpAction?.Invoke(this);
         }
     }
 }

@@ -25,3 +25,5 @@ MonoBehaviour:
       type: 2}
     ShopElement: {fileID: 577196619843595177, guid: 64395be90b0f8084b82fcbe1167cc462,
       type: 3}
+    BuffElement: {fileID: 889893241351742995, guid: c0680d929ae47b446bfe448cc12923e8,
+      type: 3}

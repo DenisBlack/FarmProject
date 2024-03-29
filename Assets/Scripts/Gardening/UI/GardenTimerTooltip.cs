@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -13,7 +14,10 @@ namespace Gardening.UI
         private float _growTime;
 
         private Action<GardenTimerTooltip> _releaseCallback;
-            //private Transform _targetTransform;
+
+        private CancellationTokenSource _cancellationTokenSource;
+
+        private float _reduceGrowPercent = 0;
         void Awake()
         {
             _text = GetComponent<TMP_Text>();
@@ -28,21 +32,41 @@ namespace Gardening.UI
             
             AttachToTransform(targetTransform, 0.9f);
             
-            UpdateTimerDisplay().Forget();
+            StartTimer().Forget();
         }
 
-        private async UniTaskVoid UpdateTimerDisplay()
+        private async UniTaskVoid StartTimer()
         {
+            _cancellationTokenSource = new CancellationTokenSource();
             while (_growTime > 0)
             {
                 string formattedTime = FormatTime(_growTime);
+                
+                _text.color = _reduceGrowPercent > 0 ? Color.green : Color.white;
                 _text.text = $"{_plantData.ProductReference.GetAsset().ItemName}: { formattedTime}";
-                await UniTask.Delay(1000); // оновлення кожну секунду
-                _growTime -= 1; // віднімання секунди від часу зростання
+               
+                await UniTask.Delay(1000, cancellationToken: _cancellationTokenSource.Token);
+         
+                if (_cancellationTokenSource.Token.IsCancellationRequested)
+                    return;
+                
+                _growTime -= 1;
             }
-            _text.text = String.Empty; //
+            _text.text = String.Empty;
             
             _releaseCallback?.Invoke(this);
+        }
+
+        public void GrowingBuffChanges(int percent)
+        {
+            _reduceGrowPercent = percent;
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+
+            float remainingTime = _growTime * (1f - _reduceGrowPercent / 100f);
+            _growTime = remainingTime;
+  
+            StartTimer().Forget();
         }
         
         private string FormatTime(float seconds)
@@ -53,14 +77,13 @@ namespace Gardening.UI
             {
                 return string.Format("{0:0}h {1:0}m", time.Hours + time.Days * 24, time.Minutes);
             }
-            else if (time.TotalMinutes >= 1)
+
+            if (time.TotalMinutes >= 1)
             {
                 return string.Format("{0:0}m {1:0}s", time.Minutes, time.Seconds);
             }
-            else
-            {
-                return string.Format("{0:0}s", time.Seconds);
-            }
+
+            return string.Format("{0:0}s", time.Seconds);
         }
         
     }

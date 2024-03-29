@@ -19,11 +19,12 @@ public class GrowingTimerFactory
         _canvasTooltip = canvasTooltip;
     }
 
-    public void CreateGardenTimerTooltip(PlantData plantData, Transform targetTransform)
+    public GardenTimerTooltip CreateGardenTimerTooltip(PlantData plantData, Transform targetTransform)
     {
         var tooltip = _diContainer.InstantiatePrefab(_timerTooltip, _canvasTooltip).GetComponent<GardenTimerTooltip>();
         tooltip.Initialized(plantData, targetTransform, Release);
         _tooltipsList.Add(tooltip);
+        return tooltip;
     }
 
     public void Release(GardenTimerTooltip timerTooltip)

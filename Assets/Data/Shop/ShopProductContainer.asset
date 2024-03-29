@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: ShopProductContainer
   m_EditorClassIdentifier: 
   _shopProductDatas:
-  - {fileID: 11400000, guid: ac0f37371933b1e45bda6d72f7f05780, type: 2}
-  - {fileID: 11400000, guid: d17408f6927f5c944ad36aebecec7b51, type: 2}
-  - {fileID: 11400000, guid: 1b78462a52556aa4c93d710246db82f1, type: 2}
-  - {fileID: 11400000, guid: 6371faed956ea004da47a63b03efd846, type: 2}
+  - {fileID: 11400000, guid: 438aa0d4095b2764db1167fc214e200b, type: 2}
+  - {fileID: 11400000, guid: 0ed614dc1e5714b45beb199b6af1232e, type: 2}
+  - {fileID: 11400000, guid: 45a7d88fdfeb22343bf59d8898185ac7, type: 2}
+  - {fileID: 11400000, guid: b9b1f469a5ca73c48807a8578edb83a8, type: 2}
+  - {fileID: 11400000, guid: c2e7793114ebcff41a7359b9e1b8abdb, type: 2}
+  - {fileID: 11400000, guid: 913266b55dca6aa4c88f757ca7ae1dcc, type: 2}

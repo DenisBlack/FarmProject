@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Effects;
 using Inventory;
 using Orders;
 using UnityEngine;
@@ -12,23 +13,29 @@ using Random = UnityEngine.Random;
 
 public class OrderSystem : IInitializable
 {
-    public Order TargetOrder => _targetOrder;
     private Order _targetOrder;
+    public Order TargetOrder => _targetOrder;
 
-    private GameSettingInstaller.Settings _settings;
+    private readonly GameSettingInstaller.Settings _settings;
     private readonly CoinSystem _coinSystem;
     private readonly InventoryStorage _storage;
+    private readonly BuffSystem _buffSystem;
 
     public Action<Order> OrderCreated;
     public Action<Order> OrderProcessed;
-
+    public Action<int> IncreaseRewardAmount;
+    private int BuffBonusIncrese;
+    
     private HashSet<IOrderAgent> _orderAgents = new HashSet<IOrderAgent>();
 
-    public OrderSystem(GameSettingInstaller.Settings settings, CoinSystem coinSystem, InventoryStorage storage)
+    public OrderSystem(GameSettingInstaller.Settings settings, CoinSystem coinSystem, InventoryStorage storage, BuffSystem buffSystem)
     {
         _settings = settings;
         _coinSystem = coinSystem;
         _storage = storage;
+        _buffSystem = buffSystem;
+        _buffSystem.OnBuffStarted += OnBuffStarted;
+        _buffSystem.OnBuffCompleted += OnBuffCompleted;
     }
 
     public void Initialize()
@@ -48,18 +55,16 @@ public class OrderSystem : IInitializable
 
     public void TryCompleteOrder()
     {
-        if (CanCompletedOrder())
-        {
-            ProcessOrder();
-            WaitForAgents().Forget();
-        }
-        else Debug.Log("Cant Completed! " + _targetOrder.OrderInfo().name);
+        if (!CanCompletedOrder()) 
+            return;
+        
+        ProcessOrder();
+        WaitForAgents().Forget();
     }
 
     private void ProcessOrder()
     {
-        Debug.Log("Order Completed! " + _targetOrder.OrderInfo().name);
-        _coinSystem.AddCoins(_targetOrder.OrderInfo().RewardCoins);
+        _coinSystem.AddCoins(_targetOrder.OrderInfo().RewardCoins + BuffBonusIncrese);
         _storage.RemoveItem(_targetOrder.OrderInfo().ItemData, _targetOrder.OrderInfo().Quantity);
         OrderProcessed?.Invoke(_targetOrder);
         _targetOrder = null;
@@ -91,5 +96,31 @@ public class OrderSystem : IInitializable
     public void RemoveAgent(IOrderAgent agent)
     {
         _orderAgents.Remove(agent);
+    }
+
+    private void OnBuffStarted(Buff buff)
+    {
+        if (buff.BuffInfo.Type == BuffData.BuffType.IncreaseReward)
+        {
+            var increaseRewardBuff = buff.BuffInfo.BuffInfoData as IncreaseRewardBuff;
+            if (increaseRewardBuff != null)
+            {
+                BuffBonusIncrese = increaseRewardBuff.IncreaseRewardAmount;
+                IncreaseRewardAmount?.Invoke(BuffBonusIncrese);
+            }
+        }
+    }
+
+    private void OnBuffCompleted(Buff buff)
+    {
+        if (buff.BuffInfo.Type == BuffData.BuffType.IncreaseReward)
+        {
+            var increaseRewardBuff = buff.BuffInfo.BuffInfoData as IncreaseRewardBuff;
+            if (increaseRewardBuff != null)
+            {
+                BuffBonusIncrese = 0;
+                IncreaseRewardAmount?.Invoke(BuffBonusIncrese);
+            }
+        }
     }
 }

@@ -1,13 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Events;
-using UnityEngine;
 using Zenject;
 
 public class CoinSystem : IInitializable
 {
-    private int _coins = 100;
+    private int _coins = 300;
 
     public Action<int> CoinsChangedAmount;
 

@@ -18,8 +18,20 @@ namespace Orders
         {
             _orderSystem = orderSystem;
             _orderTooltipFactory = orderTooltipFactory;
-            _orderSystem.OrderCreated += OrderUpdated;
+            _orderSystem.OrderCreated += OrderCreated;
             _orderSystem.OrderProcessed += OrderProcessed;
+            _orderSystem.IncreaseRewardAmount += IncreaseRewardAmount;
+        }
+
+        private void IncreaseRewardAmount(int amount)
+        {
+             _tooltips.ForEach(x=> x.BuffBonusChanged(amount));
+        }
+
+        private void OrderCreated(Order order)
+        {
+            var tooltip = _orderTooltipFactory.CreateOrderTooltip(order);
+            _tooltips.Add(tooltip);
         }
 
         private void OrderProcessed(Order order)
@@ -30,12 +42,6 @@ namespace Orders
                 tooltip.Release();
                 _tooltips.Remove(tooltip);
             }
-        }
-
-        private void OrderUpdated(Order order)
-        {
-            var tooltip = _orderTooltipFactory.CreateOrderTooltip(order);
-            _tooltips.Add(tooltip);
         }
     }
 }

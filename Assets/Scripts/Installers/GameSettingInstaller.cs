@@ -1,4 +1,5 @@
 using System;
+using Buffs;
 using Gardening;
 using Gardening.UI;
 using Orders;
@@ -27,5 +28,6 @@ public class GameSettingInstaller : ScriptableObjectInstaller<GameSettingInstall
         public OrderTooltip OrderTooltip;
         public ShopProductContainer ShopProductContainer;
         public ShopElement ShopElement;
+        public BuffElement BuffElement;
     }
 }

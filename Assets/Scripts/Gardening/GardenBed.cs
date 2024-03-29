@@ -20,12 +20,33 @@ namespace Gardening
         [Inject] private DiContainer _diContainer;
         private PlantData _plantData;
         private ProductTooltip _productTooltip;
+        private GardenTimerTooltip _timerTooltip;
+        private GardenSystem _gardenSystem;
+        private HarvestController _harvestController;
 
         [Inject]
-        public void Construct(GrowingTimerFactory growingTimerFactory, ProductTooltipFactory productTooltipFactory)
+        public void Construct(GrowingTimerFactory growingTimerFactory, ProductTooltipFactory productTooltipFactory, GardenSystem gardenSystem)
         {
             _growingTimerFactory = growingTimerFactory;
             _productTooltipFactory = productTooltipFactory;
+            _gardenSystem = gardenSystem;
+        }
+
+        private void Start()
+        {
+            _gardenSystem.ReduceGrowTimerAction += ReduceGrowTimerAction;
+        }
+
+        private void ReduceGrowTimerAction(int percent)
+        {
+            if (_isFree)
+              return;
+
+            if (_timerTooltip != null)
+                _timerTooltip.GrowingBuffChanges(percent);
+            
+            if(_harvestController != null)
+                _harvestController.BuffChanged(percent);
         }
         
         public void TryPlantSeed(PlantData plantData, Action<bool> result)
@@ -38,24 +59,27 @@ namespace Gardening
                 _plantData = plantData;
                 InitHarvestController(_plantData);
                 CreateGrowTimer(_plantData);
+
+                if (_gardenSystem.BuffActivated)
+                {
+                    ReduceGrowTimerAction(_gardenSystem.BuffPercent);
+                }
             }
             
             result?.Invoke(false);
         }
-        
+
         public void InitHarvestController(PlantData plantData)
         {
-            var harvestController = _diContainer.InstantiatePrefab(plantData.HarvestController, Pivot).GetComponent<HarvestController>();
-            harvestController.Initialized(plantData, ProductGrownCompleted, ProductHasPicked);
-      
-            CreateGrowTimer(plantData);
+            _harvestController = _diContainer.InstantiatePrefab(plantData.HarvestController, Pivot).GetComponent<HarvestController>();
+            _harvestController.Initialized(plantData, ProductGrownCompleted, ProductHasPicked);
         }
 
         private void CreateGrowTimer(PlantData plantData)
         {
-            _growingTimerFactory.CreateGardenTimerTooltip(plantData, Pivot);
+           _timerTooltip = _growingTimerFactory.CreateGardenTimerTooltip(plantData, Pivot);
         }
-
+        
         private void ProductGrownCompleted()
         {
             _productTooltip = _productTooltipFactory.CreateProductTooltip(_plantData, Pivot.transform);
@@ -75,6 +99,11 @@ namespace Gardening
         {
             _isFree = true;
             _plantData = null;
+        }
+
+        private void OnDestroy()
+        {
+            _gardenSystem.ReduceGrowTimerAction -= ReduceGrowTimerAction;
         }
     }
 }

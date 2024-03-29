@@ -1,29 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using Buffs;
+using Effects;
 using Inventory;
 using Popups;
+using Shop;
 using UnityEngine;
 using Zenject;
 
 public class ShopPopup : PopupBase
 {
    [SerializeField] private Transform _contentRoot;
-   
+
+   [Inject]
+   private DiContainer _diContainer;
    private InventoryStorage _inventoryStorage;
    private CoinSystem _coinSystem;
    private GameSettingInstaller.Settings _settings;
+   private BuffSystem _buffSystem;
+   private BuffFactory _buffFactory;
 
    private List<ShopElement> ShopElements = new List<ShopElement>();
 
    [Inject]
-   private DiContainer _diContainer;
-   
-   [Inject]
-   public void Construct(InventoryStorage inventoryStorage, CoinSystem coinSystem, GameSettingInstaller.Settings settings)
+   public void Construct(InventoryStorage inventoryStorage, CoinSystem coinSystem, GameSettingInstaller.Settings settings, BuffSystem buffSystem, BuffFactory buffFactory)
    {
       _inventoryStorage = inventoryStorage;
       _coinSystem = coinSystem;
       _settings = settings;
+      _buffSystem = buffSystem;
+      _buffFactory = buffFactory;
    }
 
    public void InitShop()
@@ -42,7 +48,16 @@ public class ShopPopup : PopupBase
       if (_coinSystem.CanSpendCoins(shopProductData.Price))
       {
          _coinSystem.ReduceCoins(shopProductData.Price);
-         _inventoryStorage.AddItem(new Item(shopProductData.ItemData), shopProductData.ItemAmount);
+         
+         switch (shopProductData)
+         {
+            case BuffProductData data:
+               _buffSystem.AddEffect(_buffFactory.CreateBuff(data.BuffData));
+               break;
+            case SeedProductData data:
+               _inventoryStorage.AddItem(new Item(data.ItemData), data.ItemAmount);
+               break;
+         }
       }
    }
    

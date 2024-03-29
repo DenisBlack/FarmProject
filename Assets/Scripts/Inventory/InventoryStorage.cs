@@ -2,34 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Events;
-using ModestTree.Util;
 using UnityEngine;
-using Zenject;
 
 namespace Inventory
 {
-    public class InventoryStorage : IInitializable, IDisposable
+    public class InventoryStorage 
     {
-        public Dictionary<Item, int> _items = new Dictionary<Item, int>();
+        private Dictionary<Item, int> _items = new Dictionary<Item, int>();
         public Dictionary<Item, int> Items => _items;
 
         public event Action OnItemUpdate;
-
-        private EventBinding<ItemPickEvent> _itemPickedEvent;
-
-        public void Initialize()
-        {
-            _itemPickedEvent = new EventBinding<ItemPickEvent>(OnItemPicked);
-            EventBus<ItemPickEvent>.Register(_itemPickedEvent);
-        }
-
-        private void OnItemPicked(ItemPickEvent eEvent)
-        {
-            if (eEvent.Item != null)
-                AddItem(eEvent.Item, eEvent.Quantity);
-        }
-
+        
         public void AddItem(Item item, int quantity)
         {
             if (!_items.TryGetValue(item, out _))
@@ -77,11 +60,6 @@ namespace Inventory
             }
 
             return 0;
-        }
-
-        public void Dispose()
-        {
-            EventBus<ItemPickEvent>.Deregister(_itemPickedEvent);
         }
     }
 }

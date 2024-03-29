@@ -16,22 +16,38 @@ namespace Gardening
     
         public bool IsPlantGrew => _plantGrew;
         private bool _plantGrew;
+        private float _growTime;
+        private float _reduceGrowPercent = 0;
 
         public void Initialized(PlantData plantData, Action<Plant> callback)
         {
             _releaseCallback = callback;
         
             _plantData = plantData;
-        
-            _cancellationTokenSource = new CancellationTokenSource();
+            _growTime = plantData.GrowTime;
+
+            GrowingBuffChanges(0);
+        }
+
+        public void GrowingBuffChanges(int percent)
+        {
+            _reduceGrowPercent = percent;
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            
+            float remainingTime = _growTime * (1f - _reduceGrowPercent / 100f);
+            _growTime = remainingTime;
+       
             GrowAsync().Forget();
         }
 
         async UniTaskVoid GrowAsync()
         {
+            _cancellationTokenSource = new CancellationTokenSource();
+            
             try
             {
-                var timePerPrefab = _plantData.GrowTime / _growthPrefabs.Count;
+                var timePerPrefab = _growTime / _growthPrefabs.Count;
        
                 _growthPrefabs[0].SetActive(true);
         
@@ -51,6 +67,10 @@ namespace Gardening
                             previousPrefab.SetActive(false);
                             currentPrefab.SetActive(true);
                         }
+                    }
+                    else
+                    {
+                        return;
                     }
                 }
             

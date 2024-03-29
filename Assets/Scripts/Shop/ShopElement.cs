@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Shop;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,8 @@ public class ShopElement : MonoBehaviour
     [SerializeField] private TMP_Text _productAmount;
     [SerializeField] private Button _button;
     [SerializeField] private TMP_Text _priceText;
+    [SerializeField] private TMP_Text _durationText;
+    [SerializeField] private TMP_Text _buffDescription;
     
     private Action<ShopProductData> _callback;
     private ShopProductData _shopProductData;
@@ -18,9 +21,20 @@ public class ShopElement : MonoBehaviour
     public void Initialized(ShopProductData shopProductData, Action<ShopProductData> callback)
     {
         _shopProductData = shopProductData;
-        _image.sprite = shopProductData.ItemData.ItemIcon;
-        _productAmount.text = shopProductData.ItemAmount.ToString();
+        _image.sprite = shopProductData.Icon;
         _priceText.text = shopProductData.Price.ToString();
+
+        switch (shopProductData)
+        {
+            case BuffProductData data:
+                _durationText.text = $"{data.BuffData.Duration}s";
+                _buffDescription.text = $"{data.BuffData.BuffDescription}";
+                break;
+            case SeedProductData data:
+                _productAmount.text = data.ItemAmount.ToString();
+                break;
+        }
+
         _callback = callback;
     }
 

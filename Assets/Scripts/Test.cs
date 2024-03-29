@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Effects;
 using Gardening;
 using Gardening.UI;
 using Inventory;
@@ -9,6 +10,14 @@ using Zenject;
 
 public class Test : MonoBehaviour
 {
+    [Header("Buffs")] 
+    [SerializeField] private BuffData _buffData;
+    [SerializeField] private BuffData _buffData2;
+
+    private Buff buff;
+    private Buff buff2;
+    
+    [Header("Items")]
     [SerializeField] private InventoryPopup _inventoryPopup;
     [SerializeField] private ItemData _itemData;
     [SerializeField] private ItemData _itemData2;
@@ -21,11 +30,13 @@ public class Test : MonoBehaviour
     [FormerlySerializedAs("_gardenTooltip")] [SerializeField] private GardenTimerTooltip gardenTimerTooltip;
     public float offset = 0.9f;
     private InventoryStorage _inventoryStorage;
-    
+    private BuffSystem _buffSystem;
+
     [Inject]
-    public void Construct(InventoryStorage inventoryStorage)
+    public void Construct(InventoryStorage inventoryStorage, BuffSystem buffSystem)
     {
         _inventoryStorage = inventoryStorage;
+        _buffSystem = buffSystem;
     }
 
     // Update is called once per frame
@@ -45,18 +56,28 @@ public class Test : MonoBehaviour
             _inventoryStorage.AddItem(item2, 50);
         }
         
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            _inventoryStorage.GetInventoryInfo();
-            //_seedItem.Initialized(new Seed(plantData));
-           // _gardenBed.TryPlantSeed(_seedItem);
-            
-           // _seed.Use(_gardenBed);
+            buff = new Buff();
+            buff.Initialized(_buffData);
+            _buffSystem.AddEffect(buff);
         }
-
-        if (Input.GetKeyDown(KeyCode.Tab))
+        
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-          //  _inventoryPopup.gameObject.SetActive(!_inventoryPopup.gameObject.activeInHierarchy);
+            _buffSystem.RemoveBuff(buff);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            buff2 = new Buff();
+            buff2.Initialized(_buffData2);
+            _buffSystem.AddEffect(buff2);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            _buffSystem.RemoveBuff(buff2);
         }
     }
 }

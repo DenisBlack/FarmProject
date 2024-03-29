@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Buffs;
+using Effects;
+using Gardening;
 using Gardening.Factory;
 using Inventory;
 using Orders;
@@ -17,8 +20,14 @@ public class GameInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        Container.BindInterfacesAndSelfTo<CoinSystem>().AsSingle().NonLazy();
+        Container.Bind<BuffSystem>().AsSingle().NonLazy();
+        Container.Bind<BuffFactory>().AsSingle().NonLazy();
+        Container.Bind<BuffElementFactory>().AsSingle().WithArguments(_settings.BuffElement).NonLazy();
         
+        Container.BindInterfacesAndSelfTo<GardenSystem>().AsSingle().NonLazy();
+        
+        Container.BindInterfacesAndSelfTo<CoinSystem>().AsSingle().NonLazy();
+
         Container.BindInterfacesAndSelfTo<OrderSystem>().AsSingle().NonLazy();
         Container.Bind<OrderTooltipFactory>().AsSingle().WithArguments(_settings.OrderTooltip, _canvasTooltip);
         Container.Bind<OrderController>().AsSingle().NonLazy();

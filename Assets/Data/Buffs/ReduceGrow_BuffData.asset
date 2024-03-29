@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e810e0644eb4907bb0397e8e5cce190, type: 3}
+  m_Name: ReduceGrow_BuffData
+  m_EditorClassIdentifier: 
+  _icon: {fileID: 21300000, guid: e1c095660d762084682be40c063042c3, type: 3}
+  _duration: 160
+  _buffType: 0
+  _buffInfoData: {fileID: 11400000, guid: 6a374507bf694704d8726ac81480432b, type: 2}
+  _buffDescription: Reduce Grow 15%
