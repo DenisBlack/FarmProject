@@ -4,6 +4,7 @@ using Zenject;
 public class CoinSystem : IInitializable
 {
     private int _coins = 300;
+    public int Coins => _coins;
 
     public Action<int> CoinsChangedAmount;
 
@@ -14,7 +15,9 @@ public class CoinSystem : IInitializable
 
     public void AddCoins(int amount)
     {
-        _coins += amount;
+        if (amount > 0)
+            _coins += amount;
+        
         UpdateListeners();
     }
 
