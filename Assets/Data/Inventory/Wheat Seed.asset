@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4038a748f437249a612b54624cef66, type: 3}
   m_Name: Wheat Seed
   m_EditorClassIdentifier: 
-  _itemName: Tomato Seed
+  _itemName: Wheat Seed
   _itemIcon: {fileID: 21300000, guid: 6e9c8e53929aedd4e8455fb572e8c139, type: 3}
   _itemType: 1

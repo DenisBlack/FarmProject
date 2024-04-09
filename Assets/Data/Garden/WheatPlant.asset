@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WheatPlant
   m_EditorClassIdentifier: 
   _productReference: {fileID: 11400000, guid: ff1ce7873ab2d37489aafa9457a8b176, type: 2}
-  _growTime: 15
+  _growTime: 2
   harvestController: {fileID: 2316006615091430372, guid: 7e3c0f11aedb4bd48a081730942f93e6,
     type: 3}
   _plantPrefab: {fileID: 765786985765548996, guid: d8f2d013ac5792c498f4bd6a421ade2c,

@@ -35,12 +35,25 @@ public class HotBar : MonoBehaviour, IDisposable
 
     private void SlotOnSelected(int idx)
     {
+        var targetSlot = _slots.FirstOrDefault(x => x.transform.GetSiblingIndex() == idx);
+        if (targetSlot == null || targetSlot.IsEmpty() || targetSlot.IsSelected)
+        {
+            if (targetSlot != null && targetSlot.IsSelected)
+            {
+                targetSlot.SelectState(false);
+                OnItemSelected?.Invoke(null);
+            }
+            return;
+        }
+
+        targetSlot.SelectState(true);
+        OnItemSelected?.Invoke(targetSlot.Item);
+
         foreach (var slot in _slots)
         {
-            slot.SelectState(slot.transform.GetSiblingIndex() == idx);
-            if (slot.Item != null && slot.transform.GetSiblingIndex().Equals(idx))
+            if (slot != targetSlot)
             {
-                OnItemSelected?.Invoke(slot.Item);
+                slot.SelectState(false);
             }
         }
     }

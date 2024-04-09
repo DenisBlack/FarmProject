@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Inventory
 {
-    public class SelectController
+    public class SelectController : IDisposable
     {
         private HotBar _hotBar;
 
@@ -22,7 +23,15 @@ namespace Inventory
         private void HotBarOnOnItemSelected(Item item)
         {
             SelectedItem = item;
-            Debug.Log("SelectedItem: " + SelectedItem.Data.ItemName);
+            if(item != null)
+                Debug.Log("SelectedItem: " + SelectedItem.Data.ItemName);
+            else
+                Debug.Log("SelectedItem null! ");
+        }
+        
+        public void Dispose()
+        {
+            _hotBar.OnItemSelected -= HotBarOnOnItemSelected;
         }
     }
 }

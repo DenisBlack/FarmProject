@@ -27,8 +27,10 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag(Constants.GardenBedTag))
         {
             var selectedItem = _selectController.SelectedItem;
+            if(selectedItem == null)
+                return;
+            
             var enoughAmount = _storage.GetItemCount(selectedItem.Data) == 0;
-           
             if(enoughAmount)
                 return;
 
